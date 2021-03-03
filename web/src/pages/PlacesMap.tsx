@@ -1,13 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FiPlus } from 'react-icons/fi';
-import { MapContainer, TileLayer } from 'react-leaflet';
-
-import 'leaflet/dist/leaflet.css';
+import { FiPlus, FiArrowRight } from 'react-icons/fi';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 import logoImg from '../images/lanche.svg';
 
 import '../styles/pages/places-map.css';
+import mapIcon from '../utils/mapIcon';
 
 function PlacesMap() {
   return (
@@ -27,14 +26,30 @@ function PlacesMap() {
       </aside>
 
       <MapContainer
-        center={[-19.8837535, -43.9341315]}
+        center={[-19.8834257, -43.930757]}
         zoom={13.5}
         style={{ width: '100%', height: '100%' }}
       >
         <TileLayer url={`https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`} />
+        <Marker
+          icon={mapIcon}
+          position={[-19.8834257, -43.930757]}
+        >
+          <Popup
+            className="map-popup"
+            closeButton={false}
+            minWidth={240}
+            maxWidth={240}
+          >
+            Quintal Vegan
+            <Link to="/places/1">
+              <FiArrowRight size={20} color="#fff" />
+            </Link>
+          </Popup>
+        </Marker>
       </MapContainer>
 
-      <Link to="" className="create-place">
+      <Link to="/places/create" className="create-place">
         <FiPlus size={32} color="#FFF" />
       </Link>
 
