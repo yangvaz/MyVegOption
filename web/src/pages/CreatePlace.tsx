@@ -1,13 +1,33 @@
-import React from "react";
-import { MapContainer, Marker, TileLayer } from 'react-leaflet';
-
+import React, { useEffect, useState } from "react";
+import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet';
+import L, { layerGroup, LeafletMouseEvent } from "leaflet";
 import { FiPlus } from "react-icons/fi";
 
 import '../styles/pages/create-place.css';
 import Sidebar from "../components/Sidebar";
-import mapIcon from "../utils/mapIcon";
+import icon from "../utils/mapIcon";
 
 export default function CreatePlace() {
+  const [position, setPosition] = useState({ latitude: 0, longitude: 0 });
+
+  function ComponentMarker() {
+    const map = useMapEvents({
+      click: (e: LeafletMouseEvent) => {
+        const { lat, lng } = e.latlng;
+        setPosition({
+          latitude: lat,
+          longitude: lng,
+        });
+        console.log('localizacao nova: ', position.latitude, position.longitude)
+        //map.locate()
+      },
+      locationfound: (location) => {
+        console.log('only test');
+      },
+    });
+    return null;
+  }
+
   return (
     <div id="page-create-place">
       <Sidebar />
@@ -25,11 +45,14 @@ export default function CreatePlace() {
                 url={`https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
               />
 
+              <ComponentMarker />
+
               <Marker
                 interactive={false}
-                icon={mapIcon}
-                position={[-19.8834257, -43.930757]}
+                icon={icon}
+                position={[position.latitude, position.longitude]}
               />
+
             </MapContainer>
 
             <div className="input-block">
@@ -84,7 +107,5 @@ export default function CreatePlace() {
         </form>
       </main>
     </div>
-  );
+  )
 }
-
-// return `https://a.tile.openstreetmap.org/${z}/${x}/${y}.png`;

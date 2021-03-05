@@ -7,7 +7,7 @@ export default {
       id: place.id,
       name: place.name,
       latitude: place.latitude,
-      longitude: place.latitude,
+      longitude: place.longitude,
       about: place.about,
       veg_type: place.veg_type,
       opening_hours: place.opening_hours,

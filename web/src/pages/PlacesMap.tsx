@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiPlus, FiArrowRight } from 'react-icons/fi';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
@@ -7,8 +7,24 @@ import logoImg from '../images/lanche.svg';
 
 import '../styles/pages/places-map.css';
 import mapIcon from '../utils/mapIcon';
+import api from '../services/api';
+
+interface Place {
+  id: number;
+  latitude: number;
+  longitude: number;
+  name: string;
+}
 
 function PlacesMap() {
+  const [places, setPlaces] = useState<Place[]>([]);
+
+  useEffect(() => {
+    api.get('/places').then(response => {
+      setPlaces(response.data);
+    })
+  }, []);
+
   return (
     <div id="page-map">
       <aside>
@@ -26,27 +42,35 @@ function PlacesMap() {
       </aside>
 
       <MapContainer
-        center={[-19.8834257, -43.930757]}
+        center={[-19.883380,-43.930800]}
         zoom={13.5}
         style={{ width: '100%', height: '100%' }}
       >
-        <TileLayer url={`https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`} />
-        <Marker
-          icon={mapIcon}
-          position={[-19.8834257, -43.930757]}
-        >
-          <Popup
-            className="map-popup"
-            closeButton={false}
-            minWidth={240}
-            maxWidth={240}
-          >
-            Quintal Vegan
-            <Link to="/places/1">
-              <FiArrowRight size={20} color="#fff" />
-            </Link>
-          </Popup>
-        </Marker>
+        <TileLayer
+          url={`https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
+        />
+
+        {places.map(place => {
+          return (
+            <Marker
+              key={place.id}
+              icon={mapIcon}
+              position={[place.latitude, place.longitude]}
+            > 
+              <Popup
+                className="map-popup"
+                closeButton={false}
+                minWidth={240}
+                maxWidth={240}
+              >
+                {place.name}
+                <Link to={`/places/${place.id}`}>
+                  <FiArrowRight size={20} color="#fff" />
+                </Link>
+              </Popup>
+            </Marker>
+          )
+        })}
       </MapContainer>
 
       <Link to="/places/create" className="create-place">
