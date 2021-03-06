@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet';
 import L, { layerGroup, LeafletMouseEvent } from "leaflet";
 import { FiPlus } from "react-icons/fi";
@@ -10,6 +10,14 @@ import icon from "../utils/mapIcon";
 export default function CreatePlace() {
   const [position, setPosition] = useState({ latitude: 0, longitude: 0 });
 
+  const [name, setName] = useState('');
+  const [about, setAbout] = useState('');
+  const [veg_type, setVegtype] = useState('');
+  const [opening_hours, setOpeningHours] = useState('');
+  const [open_on_weekends, setOpenOnWeeekends] = useState(true);
+  const [images, setImages] = useState<File[]>([]);
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
+
   function ComponentMarker() {
     const map = useMapEvents({
       click: (e: LeafletMouseEvent) => {
@@ -18,21 +26,50 @@ export default function CreatePlace() {
           latitude: lat,
           longitude: lng,
         });
-        console.log('localizacao nova: ', position.latitude, position.longitude)
-        //map.locate()
       },
-      locationfound: (location) => {
-        console.log('only test');
-      },
+      // locationfound: (location) => {
+      //   console.log('only test');
+      // },
     });
     return null;
+  }
+
+  function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+
+    const { latitude, longitude } = position;
+
+    console.log({
+      name,
+      about,
+      latitude,
+      longitude,
+      veg_type,
+      opening_hours,
+      open_on_weekends,
+    })
+  }
+
+  function handleSelectImages(event: ChangeEvent<HTMLInputElement>) {
+    if (!event.target.files) {
+      return;
+    }
+    const selectedImages = (Array.from(event.target.files));
+
+    setImages(selectedImages);
+
+    const selectedImagesPreview = selectedImages.map(image => {
+      return URL.createObjectURL(image);
+    })
+
+    setPreviewImages(selectedImagesPreview);
   }
 
   return (
     <div id="page-create-place">
       <Sidebar />
       <main>
-        <form className="create-place-form">
+        <form onSubmit={handleSubmit} className="create-place-form">
           <fieldset>
             <legend>Dados</legend>
 
@@ -47,34 +84,56 @@ export default function CreatePlace() {
 
               <ComponentMarker />
 
-              <Marker
-                interactive={false}
-                icon={icon}
-                position={[position.latitude, position.longitude]}
-              />
-
+              {position.latitude !== 0 && (
+                <Marker
+                  interactive={false}
+                  icon={icon}
+                  position={[
+                    position.latitude,
+                    position.longitude
+                  ]}
+                />
+              )}
             </MapContainer>
 
             <div className="input-block">
               <label htmlFor="name">Nome</label>
-              <input id="name" />
+              <input
+                id="name"
+                value={name}
+                onChange={event => setName(event.target.value)}
+              />
             </div>
 
             <div className="input-block">
               <label htmlFor="about">Sobre <span>Máximo de 300 caracteres</span></label>
-              <textarea id="name" maxLength={300} />
+              <textarea
+                id="about"
+                maxLength={300}
+                value={about}
+                onChange={event => setAbout(event.target.value)}
+              />
             </div>
 
             <div className="input-block">
               <label htmlFor="images">Fotos</label>
 
-              <div className="uploaded-image">
-
+              <div className="images-container">
+                {previewImages.map(image => {
+                  return (
+                    <img key={image} src={image} alt={name} />
+                  )
+                })}
+                <label htmlFor="image[]" className="new-image">
+                  <FiPlus size={24} color="#15b6d6" />
+                </label>
               </div>
-
-              <button className="new-image">
-                <FiPlus size={24} color="#15b6d6" />
-              </button>
+              <input
+                multiple
+                type="file"
+                id="image[]"
+                onChange={handleSelectImages}
+              />
             </div>
           </fieldset>
 
@@ -83,20 +142,40 @@ export default function CreatePlace() {
 
             <div className="input-block">
               <label htmlFor="veg_type"> Veg_type?</label>
-              <textarea id="veg_type" />
+              <textarea
+                id="veg_type"
+                value={veg_type}
+                onChange={event => setVegtype(event.target.value)}
+              />
             </div>
 
             <div className="input-block">
               <label htmlFor="opening_hours"> Opening Hours </label>
-              <input id="opening_hours" />
+              <input
+                id="opening_hours"
+                value={opening_hours}
+                onChange={event => setOpeningHours(event.target.value)}
+              />
             </div>
 
             <div className="input-block">
               <label htmlFor="open_on_weekends">Atende fim de semana</label>
 
               <div className="button-select">
-                <button type="button" className="active">Sim</button>
-                <button type="button">Não</button>
+                <button
+                  type="button"
+                  className={open_on_weekends ? 'active' : ''}
+                  onClick={() => setOpenOnWeeekends(true)}
+                >
+                  Sim
+                </button>
+                <button
+                  type="button"
+                  className={!open_on_weekends ? 'active' : ''}
+                  onClick={() => setOpenOnWeeekends(false)}
+                >
+                  Não
+                </button>
               </div>
             </div>
           </fieldset>
