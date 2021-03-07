@@ -53,7 +53,7 @@ export default {
       about,
       veg_type,
       opening_hours,
-      open_on_weekends,
+      open_on_weekends : open_on_weekends === 'true',
       images,
     };
 

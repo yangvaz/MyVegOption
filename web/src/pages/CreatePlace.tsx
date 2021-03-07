@@ -1,13 +1,17 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet';
-import L, { layerGroup, LeafletMouseEvent } from "leaflet";
+import { LeafletMouseEvent } from "leaflet";
 import { FiPlus } from "react-icons/fi";
 
 import '../styles/pages/create-place.css';
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/Sidebar";  
 import icon from "../utils/mapIcon";
+import api from "../services/api";
+import { useHistory } from "react-router-dom";
 
 export default function CreatePlace() {
+  const history = useHistory();
+
   const [position, setPosition] = useState({ latitude: 0, longitude: 0 });
 
   const [name, setName] = useState('');
@@ -34,10 +38,30 @@ export default function CreatePlace() {
     return null;
   }
 
-  function handleSubmit(event: FormEvent) {
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
     const { latitude, longitude } = position;
+
+    const data = new FormData();
+
+    data.append('name', name);
+    data.append('about', about);
+    data.append('latitude', String(latitude));
+    data.append('longitude', String(longitude));
+    data.append('veg_type', veg_type);
+    data.append('opening_hours', opening_hours);
+    data.append('open_on_weekends', String(open_on_weekends))
+    
+    images.forEach(image => {
+      data.append('images', image);
+    })
+
+    await api.post('places', data);
+
+    alert('Cadastro realizado com sucesso. ');
+
+    history.push('/app');
 
     console.log({
       name,
@@ -47,6 +71,7 @@ export default function CreatePlace() {
       veg_type,
       opening_hours,
       open_on_weekends,
+      images,
     })
   }
 
