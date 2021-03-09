@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Cookies from 'js-cookie';
 import { FiPlus, FiArrowRight } from 'react-icons/fi';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
@@ -18,6 +19,9 @@ interface Place {
 
 function PlacesMap() {
   const [places, setPlaces] = useState<Place[]>([]);
+
+  const [mapTheme, setMapTheme] = useState('light-v10')
+  const [textBtnTheme, setTextBtnTheme] = useState('Dark Mode')
 
   useEffect(() => {
     api.get('/places').then(response => {
@@ -42,12 +46,12 @@ function PlacesMap() {
       </aside>
 
       <MapContainer
-        center={[-19.883380,-43.930800]}
+        center={[-19.883380, -43.930800]}
         zoom={13.5}
         style={{ width: '100%', height: '100%' }}
       >
         <TileLayer
-          url={`https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
+          url={`https://api.mapbox.com/styles/v1/mapbox/${mapTheme}/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
         />
 
         {places.map(place => {
@@ -56,7 +60,7 @@ function PlacesMap() {
               key={place.id}
               icon={mapIcon}
               position={[place.latitude, place.longitude]}
-            > 
+            >
               <Popup
                 className="map-popup"
                 closeButton={false}
@@ -72,6 +76,14 @@ function PlacesMap() {
           )
         })}
       </MapContainer>
+
+      <button
+        type="button"
+        id={mapTheme}
+        // onClick={() => swapMapTheme()}
+      >
+        {textBtnTheme}
+      </button>
 
       <Link to="/places/create" className="create-place">
         <FiPlus size={32} color="#FFF" />

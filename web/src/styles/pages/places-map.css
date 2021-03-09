@@ -7,34 +7,36 @@
 }
 
 #page-map aside {
-  width: 440px;
+  width: min-content;
   background: linear-gradient(329.54deg, #7B68EE 0%, #7B68EE 100%);
-  padding: 80px;
+  padding: 3rem;
+
+  min-width: 25%;
 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-#page-map aside h2 {
-  font-size: 40px;
-  font-weight: 800;
-  line-height: 42px;
 
-  margin-top: 64px;
+#page-map aside h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 2.625rem;
+
+  margin-top: 4rem;
 }
 
 #page-map aside p {
-  line-height: 28px;
-  margin-top: 24px;
+  line-height: 1.75rem;
+  margin-top: 1.5rem;
 } 
 
 #page-map aside footer {
   display: flex;
   flex-direction: column;
   
-  line-height: 24px;
-
+  line-height: 1.5rem;
 }
 
 #page-map aside footer strong {
@@ -47,15 +49,15 @@
 
 #page-map .create-place {
   position: absolute;
-  right: 40px;
-  bottom: 40px;
+  right: 2.5rem;
+  bottom: 2.5rem;
 
   z-index: 10;
 
-  width: 64px;
-  height: 64px;
+  width: 4rem;
+  height: 4rem;
   background: #7864e9;
-  border-radius: 20px;
+  border-radius: 1.25rem;
 
   display: flex;
   align-items: center;
@@ -68,19 +70,65 @@
   background: #9586e9;
 }
 
+#page-map #light-v10 {
+  position: absolute;
+  right: 2.5rem;
+  top: 2.5rem;
+
+  z-index: 10;
+
+  width: 4rem;
+  height: 4rem;
+  background: #7864e9;
+  border-radius: 1.25rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: background-color 0.2s;
+}
+
+#page-map #light-v10:hover {
+  background: #9586e9;
+}
+
+#page-map #dark-v10 {
+  position: absolute;
+  right: 2.5rem;
+  top: 2.5rem;
+
+  z-index: 10;
+
+  width: 4rem;
+  height: 4rem;
+  background: #a9a6bd;
+  border-radius: 1.25rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: background-color 0.2s;
+}
+
+#page-map #dark-v10:hover {
+  background: #aba8c0;
+}
+
 #page-map .map-popup .leaflet-popup-content-wrapper {
   background: rgba(255, 255, 255, 0.8);
-  border-radius: 20px;
+  border-radius: 1.25rem;
   box-shadow: none;
 
-  height: 58px;
+  height: 3.625rem;
 }
 
 #page-map .map-popup .leaflet-popup-content {
   color:#6651da;
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: bold;
-  margin: 8px 12px;
+  margin: 0.5rem 0.75rem;
 
   display: flex;
   justify-content: space-between;
@@ -88,11 +136,11 @@
 }
 
 #page-map .map-popup .leaflet-popup-content a {
-  width: 40px;
-  height: 40px;
+  width: 2.5rem;
+  height: 2.5rem;
   background: #826ff0;
   box-shadow: 17.2868px 27.6589px 41.4884px rgba(23, 142, 166, 0.16);
-  border-radius: 12px;
+  border-radius: 0.75rem;
 
   display: flex;
   justify-content: center;
