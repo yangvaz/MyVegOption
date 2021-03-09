@@ -35,6 +35,7 @@ export default function CreatePlace() {
       //   console.log('only test');
       // },
     });
+    console.log(position.latitude, position.longitude)
     return null;
   }
 
@@ -189,6 +190,7 @@ export default function CreatePlace() {
               <div className="button-select">
                 <button
                   type="button"
+                  id="btn_sim"
                   className={open_on_weekends ? 'active' : ''}
                   onClick={() => setOpenOnWeeekends(true)}
                 >
@@ -196,6 +198,7 @@ export default function CreatePlace() {
                 </button>
                 <button
                   type="button"
+                  id="btn_nao"
                   className={!open_on_weekends ? 'active' : ''}
                   onClick={() => setOpenOnWeeekends(false)}
                 >
